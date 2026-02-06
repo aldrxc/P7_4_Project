@@ -1,5 +1,5 @@
-// package io.github.some_example_name.engine.io;
-package main.java.io.github.some_example_name.engine.io;
+package io.github.some_example_name.engine.io;
+// package main.java.io.github.some_example_name.engine.io;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
