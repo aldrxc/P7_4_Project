@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import io.github.some_example_name.engine.collision.Collidable;
+import io.github.some_example_name.engine.collision.CollisionManager;
+
 public class TestCollision extends ApplicationAdapter {
     private ShapeRenderer shape;
     private CollisionManager collisionManager;
@@ -21,9 +24,10 @@ public class TestCollision extends ApplicationAdapter {
         circle = new Circle(100, 300, 40, Color.RED);
         triangle = new Triangle(300, 200, 60, Color.GREEN);
 
-        collisionManager = new CollisionManager();
-        collisionManager.addCollidable(circle);
-        collisionManager.addCollidable(triangle);
+        /*collisionManager = new CollisionManager();
+        /collisionManager.addCollidable(circle);
+        /collisionManager.addCollidable(triangle);
+        */
     }
 
     @Override
