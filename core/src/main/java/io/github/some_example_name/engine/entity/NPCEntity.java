@@ -51,7 +51,7 @@ public class NPCEntity extends Entity {
   // ===== NPC-SPECIFIC METHODS =====
 
   public void applyImpulse(float impulseX, float impulseY) {
-    setVelocity(getVelocityX() + impulseX, getPositionY() + impulseY);
+    setVelocity(getVelocityX() + impulseX, getVelocityY() + impulseY);
   }
 
   public void resetTimer() {
