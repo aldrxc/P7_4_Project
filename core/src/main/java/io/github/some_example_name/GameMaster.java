@@ -26,31 +26,40 @@ public class GameMaster extends Game {
         System.out.println(" VISUAL TEST: You should see a RED SQUARE.");
         System.out.println(" INPUT TEST:  Use ARROW KEYS to move.");
         System.out.println(" MOUSE TEST:  Click anywhere to see coordinates.");
+        System.out.println(" AUDIO TEST:  Press SPACEBAR to play sound.");
         System.out.println("------------------------------------------------");
     }
 
     @Override
     public void render() {
         // --- LOGIC PHASE (Testing InputManager) ---
+        float dt = Gdx.graphics.getDeltaTime();
 
         // We use OUR DynamicInput, not Gdx.input directly!
         if (IOManager.getInstance().getDynamicInput().isKeyPressed(Input.Keys.LEFT)) {
-            testObject.getPosition().x -= 200 * Gdx.graphics.getDeltaTime();
+            testObject.getPosition().x -= 200 * dt;
         }
         if (IOManager.getInstance().getDynamicInput().isKeyPressed(Input.Keys.RIGHT)) {
-            testObject.getPosition().x += 200 * Gdx.graphics.getDeltaTime();
+            testObject.getPosition().x += 200 * dt;
         }
         if (IOManager.getInstance().getDynamicInput().isKeyPressed(Input.Keys.UP)) {
-            testObject.getPosition().y += 200 * Gdx.graphics.getDeltaTime();
+            testObject.getPosition().y += 200 * dt;
         }
         if (IOManager.getInstance().getDynamicInput().isKeyPressed(Input.Keys.DOWN)) {
-            testObject.getPosition().y -= 200 * Gdx.graphics.getDeltaTime();
+            testObject.getPosition().y -= 200 * dt;
         }
 
         // Test Mouse Input (Hardware Check)
         if (Gdx.input.justTouched()) {
             System.out.println("[MOUSE] Click detected at: " +
                     IOManager.getInstance().getDynamicInput().getMousePosition());
+        }
+
+        // AUDIO TEST
+        // We use isKeyJustPressed so it doesn't machine-gun the sound 60 times a second
+        if (IOManager.getInstance().getDynamicInput().isKeyJustPressed(Input.Keys.SPACE)) {
+            System.out.println("[AUDIO] Attempting to play 'test.mp3'...");
+            IOManager.getInstance().getAudio().playSound("test.mp3");
         }
 
         // --- RENDER PHASE (Testing OutputManager) ---

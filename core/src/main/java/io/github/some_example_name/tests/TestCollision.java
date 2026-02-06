@@ -17,10 +17,10 @@ public class TestCollision extends ApplicationAdapter {
     @Override
     public void create() {
         shape = new ShapeRenderer();
-        
+
         circle = new Circle(100, 300, 40, Color.RED);
         triangle = new Triangle(300, 200, 60, Color.GREEN);
-        
+
         collisionManager = new CollisionManager();
         collisionManager.addCollidable(circle);
         collisionManager.addCollidable(triangle);
@@ -29,17 +29,17 @@ public class TestCollision extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(0, 0, 0.2f, 1);
-        
+
         float delta = Gdx.graphics.getDeltaTime();
-        
+
         circle.update(delta);
-        
+
         collisionManager.update();
-        
+
         if (!triangle.isActive()) {
             collisionManager.removeCollidable(triangle);
         }
-        
+
         shape.begin(ShapeRenderer.ShapeType.Filled);
         circle.draw(shape);
         triangle.draw(shape);
@@ -50,7 +50,7 @@ public class TestCollision extends ApplicationAdapter {
     public void dispose() {
         shape.dispose();
     }
-    
+
     // Inner class: Circle
     class Circle implements Collidable {
         private float x, y;
@@ -58,14 +58,14 @@ public class TestCollision extends ApplicationAdapter {
         private Color color;
         private boolean active = true;
         private float speed = 200f;
-        
+
         public Circle(float x, float y, float radius, Color color) {
             this.x = x;
             this.y = y;
             this.radius = radius;
             this.color = color;
         }
-        
+
         public void update(float delta) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 x -= speed * delta;
@@ -80,61 +80,60 @@ public class TestCollision extends ApplicationAdapter {
                 y -= speed * delta;
             }
         }
-        
+
         public void draw(ShapeRenderer shape) {
             if (active) {
                 shape.setColor(color);
                 shape.circle(x, y, radius);
             }
         }
-        
+
         @Override
         public Rectangle getBounds() {
             return new Rectangle(x - radius, y - radius, radius * 2, radius * 2);
         }
-        
+
         @Override
         public void onCollision(Collidable other) {
             if (other instanceof Triangle) {
                 System.out.println("Circle hit triangle!");
             }
         }
-        
+
         public boolean isActive() {
             return active;
         }
     }
-    
+
     // Inner class: Triangle
     class Triangle implements Collidable {
         private float x, y;
         private float size;
         private Color color;
         private boolean active = true;
-        
+
         public Triangle(float x, float y, float size, Color color) {
             this.x = x;
             this.y = y;
             this.size = size;
             this.color = color;
         }
-        
+
         public void draw(ShapeRenderer shape) {
             if (active) {
                 shape.setColor(color);
                 shape.triangle(
-                    x, y,
-                    x + size, y,
-                    x + size / 2, y + size
-                );
+                        x, y,
+                        x + size, y,
+                        x + size / 2, y + size);
             }
         }
-        
+
         @Override
         public Rectangle getBounds() {
             return new Rectangle(x, y, size, size);
         }
-        
+
         @Override
         public void onCollision(Collidable other) {
             if (other instanceof Circle) {
@@ -142,7 +141,7 @@ public class TestCollision extends ApplicationAdapter {
                 active = false;
             }
         }
-        
+
         public boolean isActive() {
             return active;
         }
