@@ -6,32 +6,26 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-
-// IMPORT YOUR ABSTRACT BASE CLASS
 import io.github.some_example_name.engine.entity.GameEntity;
 
 public class TestEntity extends GameEntity implements Disposable {
     private Texture texture;
     private TextureRegion region;
     private Vector2 position;
-    private float width = 50;
-    private float height = 50;
 
     public TestEntity(float x, float y) {
         position = new Vector2(x, y);
 
-        // Create a 1x1 Red Pixel programmatically (so no assets needed)
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        // CHANGE 1: We create a 50x50 pixel image directly (instead of 1x1)
+        // This ensures the red square is visible even if scaling fails.
+        Pixmap pixmap = new Pixmap(50, 50, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.RED);
         pixmap.fill();
 
         texture = new Texture(pixmap);
         region = new TextureRegion(texture);
-
         pixmap.dispose();
     }
-
-    // --- Implementing the Abstract Methods from GameEntity ---
 
     @Override
     public TextureRegion getTexture() {
@@ -43,14 +37,15 @@ public class TestEntity extends GameEntity implements Disposable {
         return position;
     }
 
+    // CHANGE 2: Simplified width/height to just return the size of our texture
     @Override
     public float getWidth() {
-        return width;
+        return 50;
     }
 
     @Override
     public float getHeight() {
-        return height;
+        return 50;
     }
 
     @Override
