@@ -24,10 +24,14 @@ public class TestCollision extends ApplicationAdapter {
         circle = new Circle(100, 300, 40, Color.RED);
         triangle = new Triangle(300, 200, 60, Color.GREEN);
 
-        /*collisionManager = new CollisionManager();
-        /collisionManager.addCollidable(circle);
-        /collisionManager.addCollidable(triangle);
-        */
+        collisionManager = new CollisionManager();
+        collisionManager.addCollidable(circle);
+        collisionManager.addCollidable(triangle);
+
+        System.out.println("=== Collision Test Started ===");
+        System.out.println("Use ARROW keys to move the red circle");
+        System.out.println("Collide with the green triangle");
+        System.out.println("Triangle will disappear on collision");
     }
 
     @Override
@@ -62,12 +66,14 @@ public class TestCollision extends ApplicationAdapter {
         private Color color;
         private boolean active = true;
         private float speed = 200f;
+        private Rectangle bounds;
 
         public Circle(float x, float y, float radius, Color color) {
             this.x = x;
             this.y = y;
             this.radius = radius;
             this.color = color;
+            this.bounds = new Rectangle(x - radius, y - radius, radius * 2, radius * 2);
         }
 
         public void update(float delta) {
@@ -94,7 +100,8 @@ public class TestCollision extends ApplicationAdapter {
 
         @Override
         public Rectangle getBounds() {
-            return new Rectangle(x - radius, y - radius, radius * 2, radius * 2);
+            bounds.setPosition(x - radius, y - radius);
+            return bounds;
         }
 
         @Override
@@ -115,12 +122,14 @@ public class TestCollision extends ApplicationAdapter {
         private float size;
         private Color color;
         private boolean active = true;
+        private Rectangle bounds;
 
         public Triangle(float x, float y, float size, Color color) {
             this.x = x;
             this.y = y;
             this.size = size;
             this.color = color;
+            this.bounds = new Rectangle(x, y, size, size);
         }
 
         public void draw(ShapeRenderer shape) {
@@ -135,7 +144,8 @@ public class TestCollision extends ApplicationAdapter {
 
         @Override
         public Rectangle getBounds() {
-            return new Rectangle(x, y, size, size);
+            bounds.setPosition(x, y);
+            return bounds;
         }
 
         @Override
