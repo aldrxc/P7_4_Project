@@ -12,9 +12,8 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Abstract engine (Part 1)
+ * Abstract engine scene implementation.
  * - Manages generic simulation elements (entities, movement, collisions)
- * - Contains no contextual logic
  */
 
 public abstract class AbstractScene implements EngineScreen{
