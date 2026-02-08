@@ -139,7 +139,7 @@ public abstract class AbstractScene implements EngineScreen{
 
     private void ensureInitialised() {
         if (!initialised) {
-            throw new IllegalStateException("Sceen must be initialised before update/render.");
+            throw new IllegalStateException("Scene must be initialised before update/render.");
         }
     }
 

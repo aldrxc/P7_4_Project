@@ -34,14 +34,32 @@ public final class SceneManager {
     }
 
     public synchronized void load(String name, EngineScreen scene) {
-        if (name == null | name.isBlank()) {
+        if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Scene name cannot be null or blank.");
         }
 
         if (scene == null) {
             throw new IllegalArgumentException("Scene cannot be null.");
         }
-        scenes.put(name, scene);
+        EngineScreen previous = scenes.put(name, scene);
+
+        // Nothing replaced or same instance re-registered
+        if (previous == null || previous == scene) {
+            return;
+        }
+
+        // If we replaced the currently active slot, keep scene state consistent
+        if (previous == active && name.equals(activeName)) {
+            initialiseIfNeeded(scene);
+            active = scene;
+            activeName = name;
+        }
+
+        // Dispose only if no other key still references old scene object
+        if (!scenes.containsValue(previous)) {
+            initialisedScenes.remove(previous);
+            previous.dispose();
+        }
     }
     
     public synchronized void unload(String name) {
@@ -54,13 +72,85 @@ public final class SceneManager {
             return;
         }
 
-        initialisedScenes.remove(removed);
-
         if (removed == active) {
             active = null;
             activeName = null;
         }
 
-        removed.dispose();
+        // Dispose only when this scene object is no longer referenced by any key
+        if (!scenes.containsValue(removed)) {
+            initialisedScenes.remove(removed);
+            removed.dispose();
+        }
+    }
+
+    public synchronized void setActive(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Scene name cannot be null or blank.");
+        }
+
+        EngineScreen next = scenes.get(name);
+        if (next == null) {
+            throw new IllegalArgumentException("Scene not found: " + name);
+        }
+
+        initialiseIfNeeded(next);
+        active = next;
+        activeName = name;
+    }
+
+    public EngineScreen getActive() {
+        return active;
+    }
+
+    public String getActiveName() {
+        return activeName;
+    }
+
+    public void update(float delta) {
+        EngineScreen current = active;
+        if (current != null) {
+            current.update(delta);
+        }
+    }
+
+    public void render(float delta) {
+        EngineScreen current = active;
+        if (current != null) {
+            current.render(delta);
+        }
+    }
+
+    public void runFrame(float delta) {
+        update(delta);
+        render(delta);
+    }
+
+    public void resize(int width, int height) {
+        EngineScreen current = active;
+        if (current != null) {
+            current.resize(width, height);
+        }
+    }
+
+    public synchronized void dispose() {
+        Set<EngineScreen> uniqueScenes = Collections.newSetFromMap(new IdentityHashMap<>());
+        uniqueScenes.addAll(scenes.values());
+
+        for (EngineScreen scene : uniqueScenes) {
+            scene.dispose();
+        }
+
+        scenes.clear();
+        initialisedScenes.clear();
+        active = null;
+        activeName = null;
+    }
+
+    private void initialiseIfNeeded(EngineScreen scene) {
+        if (!initialisedScenes.contains(scene)) {
+            scene.initialize();
+            initialisedScenes.add(scene);
+        }
     }
 }
